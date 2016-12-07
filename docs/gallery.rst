@@ -84,3 +84,6 @@ Gallery
 
 .. image:: _static/img/viz_thumbnails/histogram.png
    :scale: 25 %
+
+.. image:: _static/img/viz_thumbnails/echarts_bar-animation-delay.png
+   :scale: 100 %

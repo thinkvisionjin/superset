@@ -1997,6 +1997,91 @@ class MapboxViz(BaseViz):
             "color": fd.get("mapbox_color"),
         }
 
+class EChartsBarBrushViz(BaseViz):
+
+    """Bar brush chart using ECharts"""
+
+    viz_type = "echarts_bar_brush"
+    verbose_name = _("ECharts-Bar Brush")
+    is_timeseries = False
+    credits = '<a href="https://www.npmjs.com/package/echarts">echars on npm</a>'
+    fieldsets = ({
+        'label': _('Chart Options'),
+        'fields': (
+            'groupby',
+            'columns',
+            'metrics',
+            'row_limit',
+            ('show_legend', 'show_bar_value', 'bar_stacked'),
+            ('y_axis_format', 'bottom_margin'),
+            ('x_axis_label', 'y_axis_label'),
+            ('reduce_x_ticks', 'contribution'),
+            ('show_controls', 'order_bars'),
+        )
+    },)
+    form_overrides = {
+        'groupby': {
+            'label': _('Series'),
+        },
+        'columns': {
+            'label': _('Breakdowns'),
+            'description': _("Defines how each series is broken down"),
+        },
+    }
+    def query_obj(self):
+        d = super(EChartsBarBrushViz, self).query_obj()  # noqa
+        fd = self.form_data
+        d['is_timeseries'] = False
+        gb = fd.get('groupby') or []
+        cols = fd.get('columns') or []
+        d['groupby'] = set(gb + cols)
+        if len(d['groupby']) < len(gb) + len(cols):
+            raise Exception("Can't have overlap between Series and Breakdowns")
+        if not self.metrics:
+            raise Exception("Pick at least one metric")
+        if not self.groupby:
+            raise Exception("Pick at least one field for [Series]")
+        return d
+    
+    def get_df(self, query_obj=None):
+        df = super(EChartsBarBrushViz, self).get_df(query_obj)  # noqa
+        fd = self.form_data
+
+        row = df.groupby(self.groupby).sum()[self.metrics[0]].copy()
+        row.sort_values(ascending=False, inplace=True)
+        columns = fd.get('columns') or []
+        pt = df.pivot_table(
+            index=self.groupby,
+            columns=columns,
+            values=self.metrics)
+        if fd.get("contribution"):
+            pt = pt.fillna(0)
+            pt = pt.T
+            pt = (pt / pt.sum()).T
+        pt = pt.reindex(row.index)
+        return pt
+    
+    def get_data(self):
+        df = self.get_df()
+        chart_data = []
+        for name, ys in df.iteritems():
+            if df[name].dtype.kind not in "biufc":
+                continue
+            if isinstance(name, string_types):
+                series_title = name
+            elif len(self.metrics) > 1:
+                series_title = ", ".join(name)
+            else:
+                l = [str(s) for s in name[1:]]
+                series_title = ", ".join(l)
+            d = {
+                "key": series_title,
+                "values": [
+                    {'x': str(i), 'y': v}
+                    for i, v in ys.iteritems()]
+            }
+            chart_data.append(d)
+        return chart_data
 
 viz_types_list = [
     TableViz,
@@ -2027,6 +2112,7 @@ viz_types_list = [
     MapboxViz,
     HistogramViz,
     SeparatorViz,
+    EChartsBarBrushViz,
 ]
 
 viz_types = OrderedDict([(v.viz_type, v) for v in viz_types_list

@@ -28,5 +28,6 @@ const vizMap = {
   treemap: require('./treemap.js'),
   word_cloud: require('./word_cloud.js'),
   world_map: require('./world_map.js'),
+  echarts_bar_brush:require('./echarts_bar_brush.js'),
 };
 export default vizMap;

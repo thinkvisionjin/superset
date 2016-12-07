@@ -728,6 +728,7 @@ export const visTypes = {
       },
     },
   },
+
 };
 
 export const fields = {

@@ -1,0 +1,13 @@
+
+
+--01.在visualization增加两个文件
+echartsbar.js
+echartsbar.css
+
+--02.在main.js中的const vizMap变量中增加
+echartsbar:require('./echartsbar.js'),
+
+--03.在store.js中的const visTypes变量中增加
+
+
+--03.在viz.py中增加class EChartsBarBrushViz

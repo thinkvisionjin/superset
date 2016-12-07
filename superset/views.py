@@ -582,11 +582,11 @@ class DatabaseView(SupersetModelView, DeleteMixin):  # noqa
 
 appbuilder.add_link(
     'Import Dashboards',
-    label=__("Import Dashboards"),
+    label=_("Import Dashboards"),
     href='/superset/import_dashboards',
     icon="fa-cloud-upload",
     category='Manage',
-    category_label=__("Manage"),
+    category_label=_("Manage"),
     category_icon='fa-wrench',)
 
 
@@ -724,9 +724,9 @@ class AccessRequestsModelView(SupersetModelView, DeleteMixin):
 appbuilder.add_view(
     AccessRequestsModelView,
     "Access requests",
-    label=__("Access requests"),
+    label=_("Access requests"),
     category="Security",
-    category_label=__("Security"),
+    category_label=_("Security"),
     icon='fa-table',)
 
 
@@ -992,9 +992,9 @@ class QueryView(SupersetModelView):
 appbuilder.add_view(
     QueryView,
     "Queries",
-    label=__("Queries"),
+    label=_("Queries"),
     category="Manage",
-    category_label=__("Manage"),
+    category_label=_("Manage"),
     icon="fa-search")
 
 
@@ -2598,26 +2598,30 @@ appbuilder.add_separator("Sources")
 appbuilder.add_view(
     CssTemplateModelView,
     "CSS Templates",
-    label=__("CSS Templates"),
+    label=_("CSS Templates"),
     icon="fa-css3",
     category="Manage",
-    category_label=__("Manage"),
+    category_label=_("Manage"),
     category_icon='')
 
 appbuilder.add_view_no_menu(CssTemplateAsyncModelView)
 
 appbuilder.add_link(
     'SQL Editor',
+    label=_("SQL Editor"),
     href='/superset/sqllab',
     category_icon="fa-flask",
     icon="fa-flask",
-    category='SQL Lab')
+    category='SQL Lab',
+    category_label=_("SQL Lab"))
 appbuilder.add_link(
     'Query Search',
+    label=_("Query Search"),
     href='/superset/sqllab#search',
     icon="fa-search",
     category_icon="fa-flask",
-    category='SQL Lab')
+    category='SQL Lab',
+    category_label=_("SQL Lab"))
 
 
 @app.after_request

@@ -236,7 +236,7 @@ class FormFactory(object):
             'bar_stacked': (BetterBooleanField, {
                 "label": _("Stacked Bars"),
                 "default": False,
-                "description": ""
+                "description": _("Stack bar values in charts")
             }),
             'show_markers': (BetterBooleanField, {
                 "label": _("Show Markers"),
@@ -248,7 +248,7 @@ class FormFactory(object):
             'show_bar_value': (BetterBooleanField, {
                 "label": _("Bar Values"),
                 "default": False,
-                "description": "Show the value on top of the bars or not"
+                "description": _("Show the value on top of the bars or not"),
             }),
             'order_bars': (BetterBooleanField, {
                 "label": _("Sort Bars"),
